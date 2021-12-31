@@ -1,7 +1,5 @@
 import ReactModal from 'react-modal';
 import { useState, FormEvent, ChangeEvent, FC, useContext } from 'react';
-import React from 'react';
-import styled from 'styled-components';
 import { UserInfo } from './App';
 
 type Props = {
@@ -84,7 +82,7 @@ export const LoginDialog: FC<Props> = props => {
                 contentLabel="Settings"
             >
                 <form onSubmit={handleSubmit} action="/" method="post">
-                    <label> 名前をフルネームで入力(スペースなし)⇒
+                    <label> {userId}{userName}名前をフルネームで入力(スペースなし)⇒
                         <input type="text" autoFocus value={pandaID}
                             onChange={handleChangeUsername} name="itemName"></input>
                         <input type="submit" value="ログイン"></input>

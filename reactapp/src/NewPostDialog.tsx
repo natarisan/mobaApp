@@ -1,6 +1,5 @@
 import ReactModal from 'react-modal';
-import { useState, useEffect, FormEvent, ChangeEvent, FC, SetStateAction } from 'react';
-import React from 'react';
+import { useState,FormEvent, ChangeEvent, FC } from 'react';
 import styled from 'styled-components';
 
 
@@ -17,16 +16,11 @@ type Props = {
     ID: number|undefined;
 }
 
-interface State {
-    userName: string; //これ何？？
-}
 
 export const NewPostDialog: FC<Props> = props => {
     const { isOpen, onClickDelete, onClickGetJson, Year, Month, Number, Days, SysNumber, setCurrentSysNumber, ID } = props;
 
-    const [id, setId] = useState<number>();
     const [name, setName] = useState<string>("");
-    const [status, setStatus] = useState<string[]>([""]);
     const [array, setArray] = useState<any[]>(["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",]);
     const [bool, setBool] = useState<boolean>(false);
     const buttonList = [];
@@ -90,10 +84,6 @@ export const NewPostDialog: FC<Props> = props => {
         array[number] = "";
         setArray(array);
         setBool(!bool);
-    }
-
-    const keepArray: any = () => {
-        setStatus(array);
     }
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {

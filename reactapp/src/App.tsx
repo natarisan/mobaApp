@@ -1,15 +1,14 @@
 import React from 'react';
 import './App.css';
-import { useState, useEffect, useRef, Dispatch, SetStateAction } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Sidenav, Nav, Dropdown, Toggle } from 'rsuite';
 import 'rsuite/dist/rsuite.min.css';
 import { NewPostDialog } from './NewPostDialog';
-import axios from 'axios';
 import { Calender } from './calender';
 import { BrowserRouter, Route, Link, Routes } from 'react-router-dom';
 import { LoginDialog } from './LoginDialog';
-
+//出張先、パスワード入力、状況取得(?)
 
 //useContext
 export const UserInfo = React.createContext<any>("");
@@ -188,7 +187,6 @@ export default function App() {
 
     const [year, setYear] = useState<number>(d.getFullYear());
     const [month, setMonth] = useState<number>(d.getMonth() + 1);
-    const [date, setDate] = useState<number>(d.getDate());
     const [currentSysNumber, setCurrentSysNumber] = useState<number>();
     const [userId, setUserId] = useState<number>(0);
     const [userName, setUserName] = useState<string>("No User");
