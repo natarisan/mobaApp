@@ -1,6 +1,7 @@
 const express = require('express');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt');
 
 const app = express();
 app.use(express.urlencoded({ extended: false }));
@@ -46,56 +47,55 @@ const deleteRow = (no, year, month, id) => {
 app.post('/api', (req, res) => {
 
     connection.query(
-        'update sys_?_?_? set name = ?,day1 = ?,day2 = ?,day3 = ?,day4 = ?,day5 = ?,day6 = ?,day7 = ?,day8 = ?,day9 = ?,day10 = ?,day11 = ?,day12 = ?,day13 = ?,day14 = ?,day15 = ?,day16 = ?,day17 = ?,day18 = ?,day19 = ?,day20 = ?,day21 = ?,day22 = ?,day23 = ?,day24 = ?,day25 = ?,day26 = ?,day27 = ?,day28 = ?,day29 = ?,day30 = ?,day31 = ? where id = ?;',
-        [req.body.No, req.body.year, req.body.month, req.body.record[1], req.body.record[4], req.body.record[5], req.body.record[6], req.body.record[7], req.body.record[8], req.body.record[9], req.body.record[10], req.body.record[11], req.body.record[12], req.body.record[13], req.body.record[14], req.body.record[15], req.body.record[16], req.body.record[17], req.body.record[18], req.body.record[19], req.body.record[20], req.body.record[21], req.body.record[22], req.body.record[23], req.body.record[24], req.body.record[25], req.body.record[26], req.body.record[27], req.body.record[28], req.body.record[29], req.body.record[30], req.body.record[31], req.body.record[32], req.body.record[33], req.body.record[34], req.body.record[0]],
+        'update sys_?_?_? set day1 = ?,day2 = ?,day3 = ?,day4 = ?,day5 = ?,day6 = ?,day7 = ?,day8 = ?,day9 = ?,day10 = ?,day11 = ?,day12 = ?,day13 = ?,day14 = ?,day15 = ?,day16 = ?,day17 = ?,day18 = ?,day19 = ?,day20 = ?,day21 = ?,day22 = ?,day23 = ?,day24 = ?,day25 = ?,day26 = ?,day27 = ?,day28 = ?,day29 = ?,day30 = ?,day31 = ? where id = ?;',
+        [req.body.No, req.body.year, req.body.month, req.body.record[4], req.body.record[5], req.body.record[6], req.body.record[7], req.body.record[8], req.body.record[9], req.body.record[10], req.body.record[11], req.body.record[12], req.body.record[13], req.body.record[14], req.body.record[15], req.body.record[16], req.body.record[17], req.body.record[18], req.body.record[19], req.body.record[20], req.body.record[21], req.body.record[22], req.body.record[23], req.body.record[24], req.body.record[25], req.body.record[26], req.body.record[27], req.body.record[28], req.body.record[29], req.body.record[30], req.body.record[31], req.body.record[32], req.body.record[33], req.body.record[34], req.body.record[0]],
         (error, results) => {
-            if (req.body.record[0] > 60 || req.body.record[0] < 0) {
+            if (req.body.record[0] > 500 || req.body.record[0] < 0) {
                 deleteRow(req.body.No, req.body.year, req.body.month, req.body.record[0]);
             }
             console.log(error);
         }
     );
 });
-
-/**app.post('/api', (req, res) => {
-
-    connection.query(
-        'insert into sys_?_?_? value(?)',
-        [req.body.No, req.body.year, req.body.month, req.body.record],
-        (error, results) => {
-            if (req.body.record[0] > 60 || req.body.record[0] < 0) {
-                deleteRow(req.body.No, req.body.year, req.body.month, req.body.record[0]);
-            }
-            console.log(error);
-        }
-    );
-});**/
 
 app.get('/loginJudge', (req, res) => {
     if (token === undefined) {
         console.log("no login");
     } else {
         console.log("logon");
-        res.json({ message: 1, id: token, name: name });
+        res.json({ id: token, name: name });
     }
 });
 
 app.post('/searchID', (req, res) => {
     connection.query(
-        'select id,name from pandaID_2;',
-        (error, results) => {
-            console.log(results[0]);
+        'select id,name,password from pandaID_2;',
+        (error, results) => {       
             for (let i = 0; i < results.length; i++) {
-                if (req.body.message === results[i].name) {
-                    console.log("一致しました");
-                    //セッションを入れる
-                    token = results[i].id;
-                    name = results[i].name;
-                    console.log(token);
-                    res.json({ status: 200 });
+                const plain = req.body.password;
+                const hash = results[i].password;
+                if (req.body.ID === results[i].name) {
+                    console.log("IDが一致しました");
+                    if (hash === "") {
+                        token = results[i].id;
+                        name = results[i].name;
+                        res.json({ status: 200 });
+                        return;
+                    }
 
+                    bcrypt.compare(plain, hash, (error, isEqual) => {
+                        if (isEqual) {
+                            console.log("PASSが一致しました");
+                            token = results[i].id;
+                            name = results[i].name;
+                            console.log(token);
+                            res.json({ status: 200 });
+                        } else {
+                            console.log("PASSが一致しませんでした")
+                        }
+                    })                    
                 } else {
-                    console.log("一致しませんでしたぜ");
+                    console.log("IDが一致しませんでした");
                 }
             }
         }
@@ -105,6 +105,21 @@ app.post('/searchID', (req, res) => {
 app.get('/searchID', (req, res) => {
     //200レスポンスとidとnameを返す
     res.json({ id: token, name: name });
+})
+
+app.post('/updatePassword', (req, res) => {
+    const plain = req.body.password;
+    bcrypt.hash(plain, 10, (error, hash) => {
+        connection.query(
+            `update pandaID_? set password = ? where id = ?`,
+            [req.body.sysNumber, hash, req.body.ID],
+            (error, results) => {
+                res.json({ status: 200 });
+                console.log("pass updated.");
+            }
+        )
+    });
+    
 })
 
 
