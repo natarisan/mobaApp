@@ -18,25 +18,15 @@ export const Calender: FC<Props> = props => {
 
 	const { Number, Calender, Year, Month, Days, SysNumber, ARate } = props;
 
-	let days = [];
 	let tdArray = [];
 	let tableArray = [];
 	let rateArray = [];
 	let rateTableArray: any = [];
 
-	for (let i = 0; i < Number; i++) {
-		let dates = i + 1;
-		let e = new Date(Year, Month - 1, dates);
-		const dayOfWeek = e.getDay();
-		const dayOfWeekStr = ["Sun", "Mon", "Tue", "Wed", "Thr", "Fry", "Sut"]
-		let day = dayOfWeekStr[dayOfWeek];
-		days.push(Month + "/" + dates + "(" + day + ")");
-	}
-
 	const CalenderFrame = styled.div`
-			padding: 5em ;
+			padding: 5em;
 			color: bkack;
-			background: #deb887;
+			background: #d3cae8;
 			border-radius:  12px
         `;
 
@@ -55,6 +45,17 @@ export const Calender: FC<Props> = props => {
 			border: solid 1px;
 		`;
 
+	const Button = styled.button`
+			border: 1px solid #ccc;
+            box-shadow: inset 1px 1px 1px #fff;
+            z-index: 2;
+			background-color: #e6e6fa;
+			border-radius: 30px;
+			margin-bottom: 5px;
+			padding: 8px;
+			margin-left: 100px;
+		`;
+
 	for (let i = 0; i < Calender.length; i++) {
 		for (let j = 0; j < 35; j++) {
 			tdArray.push(<Td>{Calender[i][j]}</Td>);
@@ -62,6 +63,7 @@ export const Calender: FC<Props> = props => {
 		tableArray.push(<tr>{tdArray}</tr>);
 		tdArray = [];
 	}
+
 
 	let flag = 0;
 
@@ -185,6 +187,9 @@ export const Calender: FC<Props> = props => {
 	return (
 		<CalenderFrame>
 			<h1>SystemNo:{SysNumber}</h1>
+			<Button onClick={(e) => handlerClickDownloadButton(e, "xlsx")}>
+				このデータを出力(Excel形式)
+				</Button>
 			<Sentence>
 
 				<h4>出勤situation</h4>
@@ -192,8 +197,8 @@ export const Calender: FC<Props> = props => {
 					<tr>
 						<Th>ID</Th>
 						<Th>NAME</Th>
-						<Th>ROLE</Th>
-						<Th>LOCATION</Th>
+						<Th>__役割__</Th>
+						<Th>__勤務地__</Th>
 						{Days.map(day => (
 							<Th>{day}</Th>
 						))}
@@ -211,10 +216,6 @@ export const Calender: FC<Props> = props => {
 					</tr>
 					{rateTableArray}
 				</Table>
-
-				<button onClick={(e) => handlerClickDownloadButton(e, "xlsx")}>
-					このデータを出力(Excel形式)
-				</button>
 
 			</Sentence>
 		</CalenderFrame>

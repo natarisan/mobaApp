@@ -48,3 +48,17 @@ div {
 .color body {
     background-color: gray;
 }
+
+.nav-style {
+    height: 100%;
+    color: #e8d3ca;
+    position: absolute;
+    top: 0
+}
+
+.logo{
+    color: white;
+    float: left;
+    padding-top: 12px;
+    padding-left: 14px;
+}

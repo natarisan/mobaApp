@@ -1,9 +1,10 @@
 import ReactModal from 'react-modal';
-import { useState,FormEvent, ChangeEvent, FC } from 'react';
+import { useState,FormEvent, ChangeEvent, FC,useEffect } from 'react';
 import styled from 'styled-components';
 
 
 type Props = {
+    Calender: any[][];
     isOpen: boolean;
     onClickDelete: () => void;
     onClickGetJson: () => void;
@@ -13,25 +14,23 @@ type Props = {
     Number: number;
     Days: any[];
     SysNumber: number;
-    ID: number|undefined;
+    ID: number;
 }
 
 
 export const NewPostDialog: FC<Props> = props => {
-    const { isOpen, onClickDelete, onClickGetJson, Year, Month, Number, Days, SysNumber, setCurrentSysNumber, ID } = props;
+    const { isOpen, onClickDelete, onClickGetJson, Year, Month, Number, Days, SysNumber, setCurrentSysNumber,ID,Calender } = props;
 
     const [name, setName] = useState<string>("");
     const [array, setArray] = useState<any[]>(["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",]);
     const [bool, setBool] = useState<boolean>(false);
     const buttonList = [];
     const buttonYOKOList = [];
+    let currentId: number = 0;
 
     setCurrentSysNumber(SysNumber);
 
-    const Button = styled.button`
-            display: flex;
-            justify-content: space-between;
-            align-items: center;           
+    const Button = styled.button`          
             padding: 1em 0.75em;
             width: 40px;
             color: #333;
@@ -44,20 +43,19 @@ export const NewPostDialog: FC<Props> = props => {
 
     const Div = styled.div`
             padding: 4px;
-            text-align: left;
-            width: 400px;
-            margin-left: auto;
+            display: inline-block;
         `;
 
     const Eiv = styled.div`
-            display:flex;
-            
+            display: flex;            
         `;
+
+    
 
     const customStyles: ReactModal.Styles = {
         // ダイアログ内のスタイル（中央に表示）
         content: {
-            top: '53%',
+            top: '48%',
             left: '50%',
             right: '82.5%',
             bottom: '-39%',
@@ -74,6 +72,32 @@ export const NewPostDialog: FC<Props> = props => {
         }
     }
 
+    
+
+    useEffect(() => {
+        switch (SysNumber) {
+            case 1:
+                currentId = ID - 101;
+                break;
+            case 2:
+                currentId = ID - 201;
+                break;
+            case 3:
+                currentId = ID - 301;
+                break;
+            case 4:
+                currentId = ID - 401;
+                break;
+            default:
+                currentId = 0;
+        }
+        if (Calender[currentId] != undefined) {
+            setArray(Calender[currentId]);
+        }
+    }, [])
+
+    
+    
     const updateArray: any = (number: number, state: string) => {
         array[number] = state;
         setArray(array);
@@ -90,7 +114,6 @@ export const NewPostDialog: FC<Props> = props => {
         event.preventDefault();
         onClickDelete();
         array[0] = ID;
-        array[1] = name;
         fetch('/api', {
             method: 'POST',
             headers: {
@@ -126,17 +149,17 @@ export const NewPostDialog: FC<Props> = props => {
         setName(e.target.value);
     }
 
-    for (let i = 4; i < 20; i++) {
-        buttonList.push(<Div>
-            <span>{Days[i - 4]}</span>
-            <b>{array[i]}</b>
-            <Button onClick={() => updateArray(i, "出勤")}>出勤</Button>
-            <Button onClick={() => updateArray(i, "モバイル")}>ﾓﾊﾞｲﾙ</Button>
-            <Button onClick={() => updateArray(i, "出張")}>出張</Button>
-            <Button onClick={() => updateArray(i, "休")}>休</Button>
-            <Button onClick={() => updateArray(i, "年休")}>年休</Button>
-            <Button onClick={() => vanishArray(i)}>クリア</Button>
-        </Div>);
+    for (let i = 4; i < 20; i++) {   
+            buttonList.push(<Div>
+                <span>{Days[i - 4]}</span>
+                <b>{array[i]}</b>
+                <Button onClick={() => updateArray(i, "出勤")}>出勤</Button>
+                <Button onClick={() => updateArray(i, "モバイル")}>ﾓﾊﾞｲﾙ</Button>
+                <Button onClick={() => updateArray(i, "出張")}>出張</Button>
+                <Button onClick={() => updateArray(i, "休")}>休</Button>
+                <Button onClick={() => updateArray(i, "年休")}>年休</Button>
+                <Button onClick={() => vanishArray(i)}>クリア</Button>
+            </Div>);
     }
 
     for (let i = 20; i < Number + 4; i++) {

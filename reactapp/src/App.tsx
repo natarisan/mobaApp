@@ -8,7 +8,8 @@ import { NewPostDialog } from './NewPostDialog';
 import { Calender } from './calender';
 import { BrowserRouter, Route, Link, Routes } from 'react-router-dom';
 import { LoginDialog } from './LoginDialog';
-//出張先、パスワード入力、状況取得(?)
+import { PassChangeDialog } from './PassChangeDialog';
+//出張先、ログイン
 
 //useContext
 export const UserInfo = React.createContext<any>("");
@@ -22,14 +23,18 @@ export default function App() {
     const Header = styled.header`
 　          height: 50px;
             top: 0px;
-            background-color: #696969;
+            background-color: #1b2c42;
             width: 100%;
             position: relative;
         `;
 
     const Body = styled.body`
-            background-color: #c0c0c0;
+            background-color: #f0f8ff;
             position: relative;
+            height: auto;
+            min-height: 720px;
+            max-height: 8000px;
+            padding-bottom: 52px;
         `;
 
     const SankakuLeftButton = styled.button`
@@ -115,27 +120,53 @@ export default function App() {
         `;
 
     const Cutton = styled.button`
+            border: 1px solid #ccc;
+            background: #e6e6fa;
+            background: -webkit-gradient(linear, left top, left bottom, from(#e6e6fa), to(#e6e6fa));
+            background: -webkit-linear-gradient(top, #e6e6fa 0%, #e6e6fa 100%);
+            background: linear-gradient(to bottom, #e6e6fa 0%, #e6e6fa 100%);
+            -webkit-box-shadow: inset 1px 1px 1px #fff;
+            box-shadow: inset 1px 1px 1px #fff;
             position: absolute;
-            top: 130px;
-            left: 820px;
+            top: 171px;
+            left: 992px;
             z-index: 2;
-            background-color: #a9a9a9;
+            background-color: #e6e6fa;
             border-radius: 20px;
+            padding: 8px
         `;
 
     const LogOutButton = styled.button`
+            border: 1px solid #ccc;
+            background: #f1e767;
+            background: -webkit-gradient(linear, left top, left bottom, from(#fdfbfb), to(#ebedee));
+            background: -webkit-linear-gradient(top, #fdfbfb 0%, #ebedee 100%);
+            background: linear-gradient(to bottom, #fdfbfb 0%, #ebedee 100%);
+            -webkit-box-shadow: inset 1px 1px 1px #fff;
+            box-shadow: inset 1px 1px 1px #fff;
             position: absolute;
-            background-color: white;
-            top: 8px;
+            top: 7px;
             right: 650px;
         `
 
+    const PassChangeButton = styled.button`
+            border: 1px solid #ccc;
+            background: #f1e767;
+            background: -webkit-gradient(linear, left top, left bottom, from(#fdfbfb), to(#ebedee));
+            background: -webkit-linear-gradient(top, #fdfbfb 0%, #ebedee 100%);
+            background: linear-gradient(to bottom, #fdfbfb 0%, #ebedee 100%);
+            -webkit-box-shadow: inset 1px 1px 1px #fff;
+            box-shadow: inset 1px 1px 1px #fff;
+            margin-top: 0.3%;
+            margin-left: 42%;
+        `
+
     const Div = styled.div`
-            box-shadow: 10px 10px #cd853f;
+            box-shadow: 10px 10px #708090;
             border-radius: 10px;
             width: 97%;
             position: relative;
-            top: 10px;
+            top: 39px;
             left: 25px;
         `;
 
@@ -143,7 +174,7 @@ export default function App() {
             position:absolute;          
             display: inline-block;
             top: 12px;
-            left: -1030px;
+            left: -1070px;
         `;
 
     const BackGround = styled.div`
@@ -158,6 +189,7 @@ export default function App() {
             position: absolute;
             left: 827px;
             display: inline-block;
+            font-weight: bold;
             `;
 
     const LoginUserName = styled.p`
@@ -173,7 +205,7 @@ export default function App() {
             `;
 
     const Footer = styled.footer`
-            background-color: #999986;
+            background-color: #1b2c42;
             height: 50px;
             width: 100%;
             `;
@@ -182,6 +214,7 @@ export default function App() {
     const [activeKey, setActiveKey] = useState('1');
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
     const [isLDialogOpen, setIsLDialogOpen] = useState<boolean>(true);
+    const [isPDialogOpen, setIsPDialogOpen] = useState<boolean>(false);
     const [users, setUsers] = useState<any[][]>([[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []]);
     const [aRate, setARate] = useState<any[][]>([[], [], [], [], [], [], [], [], [], [], [], []]);
 
@@ -189,7 +222,7 @@ export default function App() {
     const [month, setMonth] = useState<number>(d.getMonth() + 1);
     const [currentSysNumber, setCurrentSysNumber] = useState<number>();
     const [userId, setUserId] = useState<number>(0);
-    const [userName, setUserName] = useState<string>("No User");
+    const [userName, setUserName] = useState<string>("Wait");
 
     const sys01 = 1;
     const sys02 = 2;
@@ -237,11 +270,20 @@ export default function App() {
     }
 
     const openLDialog = () => {
+        localStorage.setItem('L', 'LogOut');
         setIsLDialogOpen(true);
     }
 
     const closeLDialog = () => {
         setIsLDialogOpen(false);
+    }
+
+    const openPDialog = () => {
+        setIsPDialogOpen(true);
+    }
+
+    const closePDialog = () => {
+        setIsPDialogOpen(false);
     }
 
     const getJsonOfUsers = () => {
@@ -260,15 +302,7 @@ export default function App() {
                 setUsers(data.message)
             })
 
-        fetch(`/loginJudge`, { method: 'GET' })
-            .then(res => res.json())
-            .then(data => {
-                if (data.message === 1) {
-                    setIsLDialogOpen(false);
-                    setUserId(data.id);
-                    setUserName(data.name);
-                }
-            })
+        
 
     }, [year, month, currentSysNumber])
 
@@ -290,8 +324,8 @@ export default function App() {
                         <Toggle
                             onChange={setExpanded}
                             checked={expanded}
-                            checkedChildren="Close"
-                            unCheckedChildren="Open"
+                            checkedChildren="Open"
+                            unCheckedChildren="Closed"
                         />
                     </TOGGLE>
                     <Button onClick={openDialog}>出勤状況入力</Button>
@@ -306,10 +340,10 @@ export default function App() {
                 <Body>
                     <Cutton onClick={calculateARate}>出社率計算</Cutton>
                     <Routes>
-                        <Route path="/sys01" element={<Div><Calender Number={lastDay} Calender={users} Year={year} Month={month} Days={days} SysNumber={sys01} ARate={aRate} /> <NewPostDialog isOpen={isDialogOpen} onClickDelete={closeDialog} onClickGetJson={getJsonOfUsers} Year={year} Month={month} Number={lastDay} Days={days} SysNumber={sys01} setCurrentSysNumber={setCurrentSysNumber} ID={userId} /></Div>} />
-                        <Route path="/sys02" element={<Div><Calender Number={lastDay} Calender={users} Year={year} Month={month} Days={days} SysNumber={sys02} ARate={aRate} /> <NewPostDialog isOpen={isDialogOpen} onClickDelete={closeDialog} onClickGetJson={getJsonOfUsers} Year={year} Month={month} Number={lastDay} Days={days} SysNumber={sys02} setCurrentSysNumber={setCurrentSysNumber} ID={userId} /></Div>} />
-                        <Route path="/sys03" element={<Div><Calender Number={lastDay} Calender={users} Year={year} Month={month} Days={days} SysNumber={sys03} ARate={aRate} /> <NewPostDialog isOpen={isDialogOpen} onClickDelete={closeDialog} onClickGetJson={getJsonOfUsers} Year={year} Month={month} Number={lastDay} Days={days} SysNumber={sys03} setCurrentSysNumber={setCurrentSysNumber} ID={userId} /></Div>} />
-                        <Route path="/sys04" element={<Div><Calender Number={lastDay} Calender={users} Year={year} Month={month} Days={days} SysNumber={sys04} ARate={aRate} /> <NewPostDialog isOpen={isDialogOpen} onClickDelete={closeDialog} onClickGetJson={getJsonOfUsers} Year={year} Month={month} Number={lastDay} Days={days} SysNumber={sys04} setCurrentSysNumber={setCurrentSysNumber} ID={userId} /></Div>} />
+                        <Route path="/sys01" element={<Div><Calender Number={lastDay} Calender={users} Year={year} Month={month} Days={days} SysNumber={sys01} ARate={aRate} /> <NewPostDialog isOpen={isDialogOpen} onClickDelete={closeDialog} onClickGetJson={getJsonOfUsers} Year={year} Month={month} Number={lastDay} Days={days} SysNumber={sys01} setCurrentSysNumber={setCurrentSysNumber} ID={userId} Calender={users}/></Div>} />
+                        <Route path="/sys02" element={<Div><Calender Number={lastDay} Calender={users} Year={year} Month={month} Days={days} SysNumber={sys02} ARate={aRate} /> <NewPostDialog isOpen={isDialogOpen} onClickDelete={closeDialog} onClickGetJson={getJsonOfUsers} Year={year} Month={month} Number={lastDay} Days={days} SysNumber={sys02} setCurrentSysNumber={setCurrentSysNumber} ID={userId} Calender={users}/></Div>} />
+                        <Route path="/sys03" element={<Div><Calender Number={lastDay} Calender={users} Year={year} Month={month} Days={days} SysNumber={sys03} ARate={aRate} /> <NewPostDialog isOpen={isDialogOpen} onClickDelete={closeDialog} onClickGetJson={getJsonOfUsers} Year={year} Month={month} Number={lastDay} Days={days} SysNumber={sys03} setCurrentSysNumber={setCurrentSysNumber} ID={userId} Calender={users}/></Div>} />
+                        <Route path="/sys04" element={<Div><Calender Number={lastDay} Calender={users} Year={year} Month={month} Days={days} SysNumber={sys04} ARate={aRate} /> <NewPostDialog isOpen={isDialogOpen} onClickDelete={closeDialog} onClickGetJson={getJsonOfUsers} Year={year} Month={month} Number={lastDay} Days={days} SysNumber={sys04} setCurrentSysNumber={setCurrentSysNumber} ID={userId} Calender={users}/></Div>} />
                     </Routes>
 
                     <Sidenav
@@ -319,6 +353,7 @@ export default function App() {
                         onSelect={setActiveKey}
                         style={expanded ? { width: 280 } : { width: 20 }}
                         appearance='default'
+                        className='nav-style'
                     >
                         <Sidenav.Body>
                             <Nav>
@@ -334,21 +369,23 @@ export default function App() {
                                     <Dropdown.Item eventKey="4-3">About me</Dropdown.Item>
                                     <Dropdown.Menu eventKey="4-5" title="Custom Action">
                                         <Dropdown.Item eventKey="4-5-1">Another Action01</Dropdown.Item>
-                                        <Dropdown.Item eventKey="4-5-2">AnotherAction02</Dropdown.Item>
+                                        <Dropdown.Item eventKey="4-5-2">Another Action02</Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
                             </Nav>
                         </Sidenav.Body>
-                    </Sidenav>
+                        </Sidenav>
 
                     <UserInfo.Provider value={{ userName,userId,setUserId,setUserName }}>
                         <LoginDialog isOpen={isLDialogOpen} closeLDialog={closeLDialog} />
                     </UserInfo.Provider>
+                    <PassChangeDialog isOpen={isPDialogOpen} ID={userId} closePDialog={closePDialog}/>
                     <button onClick={calculateARate}>a</button>
                 </Body>
 
                 <Footer>
-                    <p>(株)OKIソフトウェア 北陸SC</p>
+                    <h6 className='logo'>(株)OKIソフトウェア 北陸SC</h6>
+                    <PassChangeButton onClick={ openPDialog }>パスワード変更</PassChangeButton>
                 </Footer>
             </BackGround>
         </BrowserRouter>
