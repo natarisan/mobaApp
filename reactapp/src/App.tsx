@@ -353,7 +353,7 @@ export default function App() {
                 </Body>
 
                 <Footer>
-                    <h6 className='logo'>(株)OKIソフトウェア 北陸SC</h6>
+                    <h6 className='logo'>会社名</h6>
                     <PassChangeButton onClick={openPDialog}>パスワード変更</PassChangeButton>
                 </Footer>
             </BackGround>
