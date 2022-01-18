@@ -1,28 +1,18 @@
 import ReactModal from 'react-modal';
 import { useState, FormEvent, ChangeEvent, FC } from 'react';
 
+//パスワード設定(変更)画面。
+
 type Props = {
-    isOpen: boolean;
-    ID: number;
-    closePDialog: () => void;
+    isDialogOpen: boolean;
+    userId: number;
+    closePassDialog: () => void;
 }
 
 export const PassChangeDialog: FC<Props> = props => {
 
-    const { isOpen, ID, closePDialog } = props;
-
-    const [password1, setPassword1] = useState<string>("");
-
-    const [password2, setPassword2] = useState<string>("");
-
-    const [alert, setAlert] = useState<string>("");
-
-    let a = ID % 100;
-    let b = ID - a;
-    let sysNumber = b / 100;
-
     const customStyles: ReactModal.Styles = {
-        // ダイアログ内のスタイル（中央に表示）
+        // 子ウィンドウを中央に表示
         content: {
             top: '50%',
             left: '50%',
@@ -31,7 +21,7 @@ export const PassChangeDialog: FC<Props> = props => {
             marginRight: '-50%',
             transform: 'translate(-50%, -50%)'
         },
-        // 親ウィンドウのスタイル（ちょっと暗くする）
+        // 親ウィンドウを少し暗くする
         overlay: {
             left: '0%',
             background: 'rgba(0, 0, 0, 0.2)',
@@ -40,15 +30,28 @@ export const PassChangeDialog: FC<Props> = props => {
         }
     }
 
-    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+    const { isDialogOpen, userId, closePassDialog } = props;
 
-        if (password1 === "" || password2 === "") {
+    const [password, setPassword] = useState<string>("");
+
+    const [passwordConfirm, setPasswordConfirm] = useState<string>("");
+
+    const [alert, setAlert] = useState<string>("");
+
+    //ユーザIDからシステム何部かを計算する。もっとよい求め方があれば改善したい。
+    let temp = userId - (userId % 100);
+    let sysNumber = temp / 100;
+
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+
+        e.preventDefault();
+
+        if (password === "" || passwordConfirm === "") {
             setAlert("入力されていません。")
             return;
         }
 
-        if (password1 === password2) {
+        if (password === passwordConfirm) {
             fetch('/updatePassword', {
                 method: 'POST',
                 headers: {
@@ -56,14 +59,14 @@ export const PassChangeDialog: FC<Props> = props => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    password: password1,
-                    ID: ID,
+                    userId: userId,
+                    password: password,
                     sysNumber: sysNumber
                 })
             })
                 .then(res => {
                     if (res.status === 200) {
-                        closePDialog();
+                        closePassDialog();
                     }
                 })
                 .catch(error => {
@@ -73,43 +76,48 @@ export const PassChangeDialog: FC<Props> = props => {
             setAlert("パスワードとパスワード(確認)が一致していません。");
         }
 
-        setPassword1("");
-        setPassword2("");
-    }
+        setPassword("");
+        setPasswordConfirm("");
 
-    const handleChangeUsername = (e: ChangeEvent<HTMLInputElement>) => {
-        setPassword1(e.target.value);
     }
 
     const handleChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
-        setPassword2(e.target.value);
+        setPassword(e.target.value);
+    }
+
+    const handleChangePasswordConfirm = (e: ChangeEvent<HTMLInputElement>) => {
+        setPasswordConfirm(e.target.value);
     }
 
 
     return (
         <>
             <ReactModal
-                isOpen={isOpen}
+                isOpen={isDialogOpen}
                 style={customStyles}
                 contentLabel="Settings"
             >
                 <form onSubmit={handleSubmit} action="/" method="post">
                     <label> 【パスワード変更画面】
+
                         <div>
                             <label>パスワード====⇒
-                        <input type="password" autoFocus value={password1}
-                                    onChange={handleChangeUsername} name="pass1"></input>
+                                <input type="password" autoFocus value={password}
+                                    onChange={handleChangePassword} name="password"></input>
                             </label>
                         </div>
+
                         <div>
                             <label>パスワード(確認)⇒
-                        <input type="password" autoFocus value={password2}
-                                    onChange={handleChangePassword} name="pass2"></input>
+                                <input type="password" autoFocus value={passwordConfirm}
+                                    onChange={handleChangePasswordConfirm} name="passwordConfirm"></input>
                             </label>
                         </div>
-                        <p>{ alert }</p>
+
+                        <p>{alert}</p>
                         <input type="submit" value="変更"></input>
-                        <button onClick={closePDialog}>閉じる</button>
+                        <button onClick={closePassDialog}>閉じる</button>
+
                     </label>
                 </form>
             </ReactModal>

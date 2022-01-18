@@ -5,20 +5,18 @@ import styled from 'styled-components';
 import { Sidenav, Nav, Dropdown, Toggle } from 'rsuite';
 import 'rsuite/dist/rsuite.min.css';
 import { NewPostDialog } from './NewPostDialog';
-import { Calender } from './calender';
+import { CalenderFrame } from './CalenderFrame';
 import { BrowserRouter, Route, Link, Routes } from 'react-router-dom';
 import { LoginDialog } from './LoginDialog';
 import { PassChangeDialog } from './PassChangeDialog';
-//出張先、ログイン
 
-//useContext
+
 export const UserInfo = React.createContext<any>("");
-
 
 export default function App() {
 
     let d = new Date();
-    let days = [];
+    let dates = [];
 
     const Header = styled.header`
 　          height: 50px;
@@ -43,7 +41,6 @@ export default function App() {
             position: absolute;
             top: 0px;
             left: 798px;
-
             :after {
             content: '';
             width: 6px;
@@ -57,7 +54,6 @@ export default function App() {
             margin-top: -4px;
             transform: rotate(-135deg);
             }
-
             :before {
             content: '';
             width: 18px;
@@ -77,8 +73,6 @@ export default function App() {
             position: absolute;
             top: 0px;
             left: 890px;
-
-
             :after {
             content: '';
             width: 6px;
@@ -92,7 +86,6 @@ export default function App() {
             margin-top: -4px;
             transform: rotate(45deg);
             }
-
             :before {
             content: '';
             width: 18px;
@@ -117,23 +110,6 @@ export default function App() {
             position: absolute;
             top: 6px;
             right: 500px;
-        `;
-
-    const Cutton = styled.button`
-            border: 1px solid #ccc;
-            background: #e6e6fa;
-            background: -webkit-gradient(linear, left top, left bottom, from(#e6e6fa), to(#e6e6fa));
-            background: -webkit-linear-gradient(top, #e6e6fa 0%, #e6e6fa 100%);
-            background: linear-gradient(to bottom, #e6e6fa 0%, #e6e6fa 100%);
-            -webkit-box-shadow: inset 1px 1px 1px #fff;
-            box-shadow: inset 1px 1px 1px #fff;
-            position: absolute;
-            top: 171px;
-            left: 992px;
-            z-index: 2;
-            background-color: #e6e6fa;
-            border-radius: 20px;
-            padding: 8px
         `;
 
     const LogOutButton = styled.button`
@@ -174,7 +150,7 @@ export default function App() {
             position:absolute;          
             display: inline-block;
             top: 12px;
-            left: -1070px;
+            left: -47%;
         `;
 
     const BackGround = styled.div`
@@ -200,7 +176,7 @@ export default function App() {
             top: 1px;
             font-size: 17px;
             font-weight: bold;
-            left: 1400px;
+            left: 60%;
             display: inline-block;
             `;
 
@@ -213,23 +189,18 @@ export default function App() {
     const [expanded, setExpanded] = useState<boolean>(true);
     const [activeKey, setActiveKey] = useState('1');
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-    const [isLDialogOpen, setIsLDialogOpen] = useState<boolean>(true);
-    const [isPDialogOpen, setIsPDialogOpen] = useState<boolean>(false);
-    const [users, setUsers] = useState<any[][]>([[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []]);
-    const [aRate, setARate] = useState<any[][]>([[], [], [], [], [], [], [], [], [], [], [], []]);
+    const [isLoginDialogOpen, setIsLoginDialogOpen] = useState<boolean>(true);
+    const [isPassChangeDialogOpen, setIsPassChangeDialogOpen] = useState<boolean>(false);
+    const [attendanceTable, setAttendanceTable] = useState<any[][]>([[]]);
+    const [attendanceRate, setAttendanceRate] = useState<number[][]>([[], [], [], [], [], [], [], [], [], [], [], []]);
 
     const [year, setYear] = useState<number>(d.getFullYear());
     const [month, setMonth] = useState<number>(d.getMonth() + 1);
     const [currentSysNumber, setCurrentSysNumber] = useState<number>();
     const [userId, setUserId] = useState<number>(0);
-    const [userName, setUserName] = useState<string>("Wait");
+    const [userName, setUserName] = useState<string>("No User");
 
-    const sys01 = 1;
-    const sys02 = 2;
-    const sys03 = 3;
-    const sys04 = 4;
-
-    const rightClick = () => {
+    const rightButtonClick = () => {
         setMonth(month + 1);
         if (month > 11) {
             setMonth(1);
@@ -237,7 +208,7 @@ export default function App() {
         }
     }
 
-    const leftClick = () => {
+    const leftButtonClick = () => {
         setMonth(month - 1);
         if (month < 2) {
             setMonth(12);
@@ -245,23 +216,23 @@ export default function App() {
         }
     }
 
-    const getLastDay = (years: number, months: number): number => {
+    const getLastDay = (years: number, months: number): number => { //getLastDayOfMonth
         return new Date(years, months, 0).getDate();
     };
 
-    const lastDay = getLastDay(year, month);
+    const lastDay = getLastDay(year, month); //lastDayOfMonth
 
     for (let i = 0; i < lastDay; i++) {
-        let dates = i + 1;
-        let e = new Date(year, month - 1, dates);
-        const dayOfWeek = e.getDay();
+        let day = i + 1;
+        let e = new Date(year, month - 1, day);
+        const dayOfWeekCount = e.getDay();
         const dayOfWeekStr = ["日", "月", "火", "水", "木", "金", "土"]
-        let day = dayOfWeekStr[dayOfWeek];
+        let dayOfWeek = dayOfWeekStr[dayOfWeekCount];
 
-        days.push(month + "/" + dates + "(" + day + ")");
+        dates.push(month + "/" + day + "(" + dayOfWeek + ")"); //
     }
 
-    const openDialog = () => {
+    const openDialog = () => {  //OpenNewPostDialog
         setIsDialogOpen(!isDialogOpen);
     }
 
@@ -269,48 +240,48 @@ export default function App() {
         setIsDialogOpen(false);
     }
 
-    const openLDialog = () => {
+    const openLDialog = async () => {
         localStorage.setItem('L', 'LogOut');
-        setIsLDialogOpen(true);
+        setIsLoginDialogOpen(true);
     }
 
     const closeLDialog = () => {
-        setIsLDialogOpen(false);
+        setIsLoginDialogOpen(false);
     }
 
     const openPDialog = () => {
-        setIsPDialogOpen(true);
+        setIsPassChangeDialogOpen(true);
     }
 
     const closePDialog = () => {
-        setIsPDialogOpen(false);
+        setIsPassChangeDialogOpen(false);
     }
 
-    const getJsonOfUsers = () => {
-        fetch(`/api_${currentSysNumber}_${year}_${month}`, { method: 'GET' })
+    const getDataFromAttendanceTable = () => {
+        fetch(`/getDataFromAttendanceTable_${currentSysNumber}_${year}_${month}`, { method: 'GET' })
             .then(res => res.json())
             .then(data => {
-                setUsers(data.message)
+                setAttendanceTable(data.message)
             })
     }
 
     useEffect(() => {
 
-        fetch(`/api_${currentSysNumber}_${year}_${month}`, { method: 'GET' })
+        fetch(`/getDataFromAttendanceTable_${currentSysNumber}_${year}_${month}`, { method: 'GET' })
             .then(res => res.json())
             .then(data => {
-                setUsers(data.message)
+                setAttendanceTable(data.message)
             })
 
-        
+
 
     }, [year, month, currentSysNumber])
 
-    const calculateARate = () => {
-        fetch(`/tableRate_${currentSysNumber}_${year}_${month}`, { method: 'GET' })
+    const getAttendanceRate = () => {
+        fetch(`/calcAttendanceRate_${currentSysNumber}_${year}_${month}`, { method: 'GET' })
             .then(res => res.json())
             .then(data => {
-                setARate(data.message)
+                setAttendanceRate(data.message)
             })
     }
 
@@ -330,20 +301,19 @@ export default function App() {
                     </TOGGLE>
                     <Button onClick={openDialog}>出勤状況入力</Button>
                     <LogOutButton onClick={openLDialog}>ログアウト</LogOutButton>
-                    <SankakuRightButton onClick={rightClick}></SankakuRightButton>
+                    <SankakuRightButton onClick={rightButtonClick}></SankakuRightButton>
                     <P>{year}/{month}</P>
                     <LoginUserName>{userName}さん</LoginUserName>
-                    <SankakuLeftButton onClick={leftClick}></SankakuLeftButton>
+                    <SankakuLeftButton onClick={leftButtonClick}></SankakuLeftButton>
 
                 </Header>
 
                 <Body>
-                    <Cutton onClick={calculateARate}>出社率計算</Cutton>
                     <Routes>
-                        <Route path="/sys01" element={<Div><Calender Number={lastDay} Calender={users} Year={year} Month={month} Days={days} SysNumber={sys01} ARate={aRate} /> <NewPostDialog isOpen={isDialogOpen} onClickDelete={closeDialog} onClickGetJson={getJsonOfUsers} Year={year} Month={month} Number={lastDay} Days={days} SysNumber={sys01} setCurrentSysNumber={setCurrentSysNumber} ID={userId} Calender={users}/></Div>} />
-                        <Route path="/sys02" element={<Div><Calender Number={lastDay} Calender={users} Year={year} Month={month} Days={days} SysNumber={sys02} ARate={aRate} /> <NewPostDialog isOpen={isDialogOpen} onClickDelete={closeDialog} onClickGetJson={getJsonOfUsers} Year={year} Month={month} Number={lastDay} Days={days} SysNumber={sys02} setCurrentSysNumber={setCurrentSysNumber} ID={userId} Calender={users}/></Div>} />
-                        <Route path="/sys03" element={<Div><Calender Number={lastDay} Calender={users} Year={year} Month={month} Days={days} SysNumber={sys03} ARate={aRate} /> <NewPostDialog isOpen={isDialogOpen} onClickDelete={closeDialog} onClickGetJson={getJsonOfUsers} Year={year} Month={month} Number={lastDay} Days={days} SysNumber={sys03} setCurrentSysNumber={setCurrentSysNumber} ID={userId} Calender={users}/></Div>} />
-                        <Route path="/sys04" element={<Div><Calender Number={lastDay} Calender={users} Year={year} Month={month} Days={days} SysNumber={sys04} ARate={aRate} /> <NewPostDialog isOpen={isDialogOpen} onClickDelete={closeDialog} onClickGetJson={getJsonOfUsers} Year={year} Month={month} Number={lastDay} Days={days} SysNumber={sys04} setCurrentSysNumber={setCurrentSysNumber} ID={userId} Calender={users}/></Div>} />
+                        <Route path="/sys01" element={<Div><CalenderFrame getAttendanceRate={getAttendanceRate} attendanceTable={attendanceTable} year={year} month={month} dates={dates} sysNumber={1} attendanceRateTable={attendanceRate} /> <NewPostDialog isDialogOpen={isDialogOpen} onClickCloseDialog={closeDialog} onClickGetTableData={getDataFromAttendanceTable} year={year} month={month} lastDayOfMonth={lastDay} dates={dates} sysNumber={1} setCurrentSysNumber={setCurrentSysNumber} userId={userId} attendanceTable={attendanceTable} /></Div>} />
+                        <Route path="/sys02" element={<Div><CalenderFrame getAttendanceRate={getAttendanceRate} attendanceTable={attendanceTable} year={year} month={month} dates={dates} sysNumber={2} attendanceRateTable={attendanceRate} /> <NewPostDialog isDialogOpen={isDialogOpen} onClickCloseDialog={closeDialog} onClickGetTableData={getDataFromAttendanceTable} year={year} month={month} lastDayOfMonth={lastDay} dates={dates} sysNumber={2} setCurrentSysNumber={setCurrentSysNumber} userId={userId} attendanceTable={attendanceTable} /></Div>} />
+                        <Route path="/sys03" element={<Div><CalenderFrame getAttendanceRate={getAttendanceRate} attendanceTable={attendanceTable} year={year} month={month} dates={dates} sysNumber={3} attendanceRateTable={attendanceRate} /> <NewPostDialog isDialogOpen={isDialogOpen} onClickCloseDialog={closeDialog} onClickGetTableData={getDataFromAttendanceTable} year={year} month={month} lastDayOfMonth={lastDay} dates={dates} sysNumber={3} setCurrentSysNumber={setCurrentSysNumber} userId={userId} attendanceTable={attendanceTable} /></Div>} />
+                        <Route path="/sys04" element={<Div><CalenderFrame getAttendanceRate={getAttendanceRate} attendanceTable={attendanceTable} year={year} month={month} dates={dates} sysNumber={4} attendanceRateTable={attendanceRate} /> <NewPostDialog isDialogOpen={isDialogOpen} onClickCloseDialog={closeDialog} onClickGetTableData={getDataFromAttendanceTable} year={year} month={month} lastDayOfMonth={lastDay} dates={dates} sysNumber={4} setCurrentSysNumber={setCurrentSysNumber} userId={userId} attendanceTable={attendanceTable} /></Div>} />
                     </Routes>
 
                     <Sidenav
@@ -374,22 +344,19 @@ export default function App() {
                                 </Dropdown>
                             </Nav>
                         </Sidenav.Body>
-                        </Sidenav>
+                    </Sidenav>
 
-                    <UserInfo.Provider value={{ userName,userId,setUserId,setUserName }}>
-                        <LoginDialog isOpen={isLDialogOpen} closeLDialog={closeLDialog} />
+                    <UserInfo.Provider value={{ setUserId, setUserName }}>
+                        <LoginDialog isDialogOpen={isLoginDialogOpen} closeLoginDialog={closeLDialog} />
                     </UserInfo.Provider>
-                    <PassChangeDialog isOpen={isPDialogOpen} ID={userId} closePDialog={closePDialog}/>
-                    <button onClick={calculateARate}>a</button>
+                    <PassChangeDialog isDialogOpen={isPassChangeDialogOpen} userId={userId} closePassDialog={closePDialog} />
                 </Body>
 
                 <Footer>
                     <h6 className='logo'>(株)OKIソフトウェア 北陸SC</h6>
-                    <PassChangeButton onClick={ openPDialog }>パスワード変更</PassChangeButton>
+                    <PassChangeButton onClick={openPDialog}>パスワード変更</PassChangeButton>
                 </Footer>
             </BackGround>
         </BrowserRouter>
     );
 }
-
-
