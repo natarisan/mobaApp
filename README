@@ -1,0 +1,5 @@
+実際に社内で運用したシステムになります。
+
+nodeappにnode.jsのサーバ、reactappにreactのソースコードがあります。
+
+nodeの方はJavaScript、reactの方は主にTypeScriptを用いています。
