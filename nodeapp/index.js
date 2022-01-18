@@ -369,7 +369,7 @@ for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
                     );
 
                     connection.query(
-                        `select count(*) as moji20 from sys_${sysNumber}_${year}_${month} where location = '北陸SC' and day${i} = '出勤';`,
+                        `select count(*) as moji20 from sys_${sysNumber}_${year}_${month} where location = '勤務地A' and day${i} = '出勤';`,
                         (error, results) => {
                             if (results != null) {
                                 rateArray[20][i - 1] = results[0].moji20;
@@ -378,7 +378,7 @@ for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
                     );
 
                     connection.query(
-                        `select count(*) as moji21 from sys_${sysNumber}_${year}_${month} where location = '北陸SC' and day${i} = 'モバイル';`,
+                        `select count(*) as moji21 from sys_${sysNumber}_${year}_${month} where location = '勤務地A' and day${i} = 'モバイル';`,
                         (error, results) => {
                             if (results != null) {
                                 rateArray[21][i - 1] = results[0].moji21;
@@ -387,7 +387,7 @@ for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
                     );
 
                     connection.query(
-                        `select count(*) as moji22 from sys_${sysNumber}_${year}_${month} where location = '北陸SC';`,
+                        `select count(*) as moji22 from sys_${sysNumber}_${year}_${month} where location = '勤務地A';`,
                         (error, results) => {
                             if (results != null) {
                                 rateArray[22][i - 1] = results[0].moji22;
@@ -400,7 +400,7 @@ for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
                     );
 
                     connection.query(
-                        `select count(*) as moji24 from sys_${sysNumber}_${year}_${month} where location = '蕨' and day${i} = '出勤';`,
+                        `select count(*) as moji24 from sys_${sysNumber}_${year}_${month} where location = '勤務地B' and day${i} = '出勤';`,
                         (error, results) => {
                             if (results != null) {
                                 rateArray[24][i - 1] = results[0].moji24;
@@ -409,7 +409,7 @@ for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
                     );
 
                     connection.query(
-                        `select count(*) as moji25 from sys_${sysNumber}_${year}_${month} where location = '蕨' and day${i} = 'モバイル';`,
+                        `select count(*) as moji25 from sys_${sysNumber}_${year}_${month} where location = '勤務地B' and day${i} = 'モバイル';`,
                         (error, results) => {
                             if (results != null) {
                                 rateArray[25][i - 1] = results[0].moji25;
@@ -418,7 +418,7 @@ for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
                     );
 
                     connection.query(
-                        `select count(*) as moji26 from sys_${sysNumber}_${year}_${month} where location = '蕨';`,
+                        `select count(*) as moji26 from sys_${sysNumber}_${year}_${month} where location = '勤務地B';`,
                         (error, results) => {
                             if (results != null) {
                                 rateArray[26][i - 1] = results[0].moji26;
