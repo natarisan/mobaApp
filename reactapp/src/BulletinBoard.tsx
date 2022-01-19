@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export const BulletinBoard = () => {
 
-	const[file, setFile] = useState<string|Blob>("");
+    const[file, setFile] = useState<string|Blob>("");
     const [fileName, setFileName] = useState<string>("");
     const [images, setImage] = useState<any>();
     let image: any;
