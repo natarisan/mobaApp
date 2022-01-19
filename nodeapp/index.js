@@ -131,7 +131,7 @@ for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
 
             app.get(`/getDataFromAttendanceTable_${sysNumber}_${year}_${month}`, (req, res) => {
 
-                let tDimeArray = [];
+                let attendanceTable = []; //attendanceTable
                 connection.query(
                     `select * from sys_${sysNumber}_${year}_${month};`,
                     (error, results) => {
@@ -140,48 +140,47 @@ for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
                         if (results != null) {
 
                             for (let i = 0; i < results.length; i++) {
-                                tDimeArray[i] = [];
+                                attendanceTable[i] = [];
 
-                                tDimeArray[i][0] = results[i].id;
-                                tDimeArray[i][1] = results[i].name;
-                                tDimeArray[i][2] = results[i].role;
-                                tDimeArray[i][3] = results[i].location;
-                                tDimeArray[i][4] = results[i].travel;
-                                tDimeArray[i][5] = results[i].day1;
-                                tDimeArray[i][6] = results[i].day2;
-                                tDimeArray[i][7] = results[i].day3;
-                                tDimeArray[i][8] = results[i].day4;
-                                tDimeArray[i][9] = results[i].day5;
-                                tDimeArray[i][10] = results[i].day6;
-                                tDimeArray[i][11] = results[i].day7;
-                                tDimeArray[i][12] = results[i].day8;
-                                tDimeArray[i][13] = results[i].day9;
-                                tDimeArray[i][14] = results[i].day10;
-                                tDimeArray[i][15] = results[i].day11;
-                                tDimeArray[i][16] = results[i].day12;
-                                tDimeArray[i][17] = results[i].day13;
-                                tDimeArray[i][18] = results[i].day14;
-                                tDimeArray[i][19] = results[i].day15;
-                                tDimeArray[i][20] = results[i].day16;
-                                tDimeArray[i][21] = results[i].day17;
-                                tDimeArray[i][22] = results[i].day18;
-                                tDimeArray[i][23] = results[i].day19;
-                                tDimeArray[i][24] = results[i].day20;
-                                tDimeArray[i][25] = results[i].day21;
-                                tDimeArray[i][26] = results[i].day22;
-                                tDimeArray[i][27] = results[i].day23;
-                                tDimeArray[i][28] = results[i].day24;
-                                tDimeArray[i][29] = results[i].day25;
-                                tDimeArray[i][30] = results[i].day26;
-                                tDimeArray[i][31] = results[i].day27;
-                                tDimeArray[i][32] = results[i].day28;
-                                tDimeArray[i][33] = results[i].day29;
-                                tDimeArray[i][34] = results[i].day30;
-                                tDimeArray[i][35] = results[i].day31;
+                                attendanceTable[i][0] = results[i].id;
+                                attendanceTable[i][1] = results[i].name;
+                                attendanceTable[i][2] = results[i].role;
+                                attendanceTable[i][3] = results[i].location;
+                                attendanceTable[i][4] = results[i].travel;
+                                attendanceTable[i][5] = results[i].day1;
+                                attendanceTable[i][6] = results[i].day2;
+                                attendanceTable[i][7] = results[i].day3;
+                                attendanceTable[i][8] = results[i].day4;
+                                attendanceTable[i][9] = results[i].day5;
+                                attendanceTable[i][10] = results[i].day6;
+                                attendanceTable[i][11] = results[i].day7;
+                                attendanceTable[i][12] = results[i].day8;
+                                attendanceTable[i][13] = results[i].day9;
+                                attendanceTable[i][14] = results[i].day10;
+                                attendanceTable[i][15] = results[i].day11;
+                                attendanceTable[i][16] = results[i].day12;
+                                attendanceTable[i][17] = results[i].day13;
+                                attendanceTable[i][18] = results[i].day14;
+                                attendanceTable[i][19] = results[i].day15;
+                                attendanceTable[i][20] = results[i].day16;
+                                attendanceTable[i][21] = results[i].day17;
+                                attendanceTable[i][22] = results[i].day18;
+                                attendanceTable[i][23] = results[i].day19;
+                                attendanceTable[i][24] = results[i].day20;
+                                attendanceTable[i][25] = results[i].day21;
+                                attendanceTable[i][26] = results[i].day22;
+                                attendanceTable[i][27] = results[i].day23;
+                                attendanceTable[i][28] = results[i].day24;
+                                attendanceTable[i][29] = results[i].day25;
+                                attendanceTable[i][30] = results[i].day26;
+                                attendanceTable[i][31] = results[i].day27;
+                                attendanceTable[i][32] = results[i].day28;
+                                attendanceTable[i][33] = results[i].day29;
+                                attendanceTable[i][34] = results[i].day30;
+                                attendanceTable[i][35] = results[i].day31;
                             }
 
-                            //console.log(tDimeArray);
-                            res.json({ message: tDimeArray });
+                            res.json({ message: attendanceTable });
                         } else {
                             res.json({ message: [[" ", "n", "o", " ", "t", "a", "b", "l", "e", "."]] });
                         }
@@ -200,9 +199,9 @@ for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
 
             app.get(`/calcAttendanceRate_${sysNumber}_${year}_${month}`, (req, res) => {
 
-                let rateArray = [];
+                let attendanceRateTable = [];
                 for (let i = 0; i < 28; i++) {
-                    rateArray[i] = [];
+                    attendanceRateTable[i] = [];
                 }
                 for (let i = 1; i < 32; i++) {
 
@@ -210,7 +209,7 @@ for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
                         `select count(*) as moji0 from sys_${sysNumber}_${year}_${month} where role = '社員' and day${i} = '出勤';`,
                         (error, results) => {
                             if (results != null) {
-                                rateArray[0][i - 1] = results[0].moji0;
+                                attendanceRateTable[0][i - 1] = results[0].moji0;
                             }
                         }
                     );
@@ -219,7 +218,7 @@ for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
                         `select count(*) as moji1 from sys_${sysNumber}_${year}_${month} where role = '社員' and day${i} = 'モバイル';`,
                         (error, results) => {
                             if (results != null) {
-                                rateArray[1][i - 1] = results[0].moji1;
+                                attendanceRateTable[1][i - 1] = results[0].moji1;
 
                             }
                         }
@@ -229,10 +228,10 @@ for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
                         `select count(*) as moji2 from sys_${sysNumber}_${year}_${month} where role = '社員';`,
                         (error, results) => {
                             if (results != null) {
-                                rateArray[2][i - 1] = results[0].moji2;
-                                rateArray[3][i - 1] = parseInt((rateArray[0][i - 1] / rateArray[2][i - 1]) * 100);
-                                if (rateArray[2][i - 1] === 0) {
-                                    rateArray[3][i - 1] = 0;
+                                attendanceRateTable[2][i - 1] = results[0].moji2;
+                                attendanceRateTable[3][i - 1] = parseInt((attendanceRateTable[0][i - 1] / attendanceRateTable[2][i - 1]) * 100);
+                                if (attendanceRateTable[2][i - 1] === 0) {
+                                    attendanceRateTable[3][i - 1] = 0;
                                 }
                             }
                         }
@@ -242,7 +241,7 @@ for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
                         `select count(*) as moji4 from sys_${sysNumber}_${year}_${month} where role = '派遣' and day${i} = '出勤';`,
                         (error, results) => {
                             if (results != null) {
-                                rateArray[4][i - 1] = results[0].moji4;
+                                attendanceRateTable[4][i - 1] = results[0].moji4;
 
                             }
                         }
@@ -252,7 +251,7 @@ for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
                         `select count(*) as moji5 from sys_${sysNumber}_${year}_${month} where role = '派遣' and day${i} = 'モバイル';`,
                         (error, results) => {
                             if (results != null) {
-                                rateArray[5][i - 1] = results[0].moji5;
+                                attendanceRateTable[5][i - 1] = results[0].moji5;
 
                             }
                         }
@@ -262,10 +261,10 @@ for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
                         `select count(*) as moji6 from sys_${sysNumber}_${year}_${month} where role = '派遣';`,
                         (error, results) => {
                             if (results != null) {
-                                rateArray[6][i - 1] = results[0].moji6;
-                                rateArray[7][i - 1] = parseInt((rateArray[4][i - 1] / rateArray[6][i - 1]) * 100);
-                                if (rateArray[6][i - 1] === 0) {
-                                    rateArray[7][i - 1] = 0;
+                                attendanceRateTable[6][i - 1] = results[0].moji6;
+                                attendanceRateTable[7][i - 1] = parseInt((attendanceRateTable[4][i - 1] / attendanceRateTable[6][i - 1]) * 100);
+                                if (attendanceRateTable[6][i - 1] === 0) {
+                                    attendanceRateTable[7][i - 1] = 0;
                                 }
 
                             }
@@ -276,7 +275,7 @@ for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
                         `select count(*) as moji8 from sys_${sysNumber}_${year}_${month} where role = '協力会社' and day${i} = '出勤';`,
                         (error, results) => {
                             if (results != null) {
-                                rateArray[8][i - 1] = results[0].moji8;
+                                attendanceRateTable[8][i - 1] = results[0].moji8;
 
                             }
                         }
@@ -286,7 +285,7 @@ for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
                         `select count(*) as moji9 from sys_${sysNumber}_${year}_${month} where role = '協力会社' and day${i} = 'モバイル';`,
                         (error, results) => {
                             if (results != null) {
-                                rateArray[9][i - 1] = results[0].moji9;
+                                attendanceRateTable[9][i - 1] = results[0].moji9;
 
                             }
                         }
@@ -296,10 +295,10 @@ for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
                         `select count(*) as moji10 from sys_${sysNumber}_${year}_${month} where role = '協力会社';`,
                         (error, results) => {
                             if (results != null) {
-                                rateArray[10][i - 1] = results[0].moji10;
-                                rateArray[11][i - 1] = parseInt((rateArray[8][i - 1] / rateArray[10][i - 1]) * 100);
-                                if (rateArray[10][i - 1] === 0) {
-                                    rateArray[11][i - 1] = 0;
+                                attendanceRateTable[10][i - 1] = results[0].moji10;
+                                attendanceRateTable[11][i - 1] = parseInt((attendanceRateTable[8][i - 1] / attendanceRateTable[10][i - 1]) * 100);
+                                if (attendanceRateTable[10][i - 1] === 0) {
+                                    attendanceRateTable[11][i - 1] = 0;
                                 }
                             }
                         }
@@ -309,7 +308,7 @@ for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
                         `select count(*) as moji12 from sys_${sysNumber}_${year}_${month} where role = 'OSES' and day${i} = '出勤';`,
                         (error, results) => {
                             if (results != null) {
-                                rateArray[12][i - 1] = results[0].moji12;
+                                attendanceRateTable[12][i - 1] = results[0].moji12;
                             }
                         }
                     );
@@ -318,7 +317,7 @@ for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
                         `select count(*) as moji13 from sys_${sysNumber}_${year}_${month} where role = 'OSES' and day${i} = 'モバイル';`,
                         (error, results) => {
                             if (results != null) {
-                                rateArray[13][i - 1] = results[0].moji13;
+                                attendanceRateTable[13][i - 1] = results[0].moji13;
                             }
                         }
                     );
@@ -327,11 +326,11 @@ for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
                         `select count(*) as moji14 from sys_${sysNumber}_${year}_${month} where role = 'OSES';`,
                         (error, results) => {
                             if (results != null) {
-                                rateArray[14][i - 1] = results[0].moji14;
+                                attendanceRateTable[14][i - 1] = results[0].moji14;
 
-                                rateArray[15][i - 1] = parseInt((rateArray[12][i - 1] / rateArray[14][i - 1]) * 100);
-                                if (rateArray[14][i - 1] === 0) {
-                                    rateArray[15][i - 1] = 0;
+                                attendanceRateTable[15][i - 1] = parseInt((attendanceRateTable[12][i - 1] / attendanceRateTable[14][i - 1]) * 100);
+                                if (attendanceRateTable[14][i - 1] === 0) {
+                                    attendanceRateTable[15][i - 1] = 0;
                                 }
                             }
                         }
@@ -341,7 +340,7 @@ for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
                         `select count(*) as moji16 from sys_${sysNumber}_${year}_${month} where day${i} = '出勤';`,
                         (error, results) => {
                             if (results != null) {
-                                rateArray[16][i - 1] = results[0].moji16;
+                                attendanceRateTable[16][i - 1] = results[0].moji16;
                             }
                         }
                     );
@@ -350,7 +349,7 @@ for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
                         `select count(*) as moji17 from sys_${sysNumber}_${year}_${month} where day${i} = 'モバイル';`,
                         (error, results) => {
                             if (results != null) {
-                                rateArray[17][i - 1] = results[0].moji17;
+                                attendanceRateTable[17][i - 1] = results[0].moji17;
                             }
                         }
                     );
@@ -359,77 +358,77 @@ for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
                         `select count(*) as moji18 from sys_${sysNumber}_${year}_${month} where name is not null;`,
                         (error, results) => {
                             if (results != null) {
-                                rateArray[18][i - 1] = results[0].moji18;
-                                rateArray[19][i - 1] = parseInt(rateArray[16][i - 1] / rateArray[18][i - 1] * 100);
-                                if (rateArray[18][i - 1] === 0) {
-                                    rateArray[19][i - 1] = 0;
+                                attendanceRateTable[18][i - 1] = results[0].moji18;
+                                attendanceRateTable[19][i - 1] = parseInt(attendanceRateTable[16][i - 1] / attendanceRateTable[18][i - 1] * 100);
+                                if (attendanceRateTable[18][i - 1] === 0) {
+                                    attendanceRateTable[19][i - 1] = 0;
                                 }
                             }
                         }
                     );
 
                     connection.query(
-                        `select count(*) as moji20 from sys_${sysNumber}_${year}_${month} where location = '勤務地A' and day${i} = '出勤';`,
+                        `select count(*) as moji20 from sys_${sysNumber}_${year}_${month} where location = '北陸SC' and day${i} = '出勤';`,
                         (error, results) => {
                             if (results != null) {
-                                rateArray[20][i - 1] = results[0].moji20;
+                                attendanceRateTable[20][i - 1] = results[0].moji20;
                             }
                         }
                     );
 
                     connection.query(
-                        `select count(*) as moji21 from sys_${sysNumber}_${year}_${month} where location = '勤務地A' and day${i} = 'モバイル';`,
+                        `select count(*) as moji21 from sys_${sysNumber}_${year}_${month} where location = '北陸SC' and day${i} = 'モバイル';`,
                         (error, results) => {
                             if (results != null) {
-                                rateArray[21][i - 1] = results[0].moji21;
+                                attendanceRateTable[21][i - 1] = results[0].moji21;
                             }
                         }
                     );
 
                     connection.query(
-                        `select count(*) as moji22 from sys_${sysNumber}_${year}_${month} where location = '勤務地A';`,
+                        `select count(*) as moji22 from sys_${sysNumber}_${year}_${month} where location = '北陸SC';`,
                         (error, results) => {
                             if (results != null) {
-                                rateArray[22][i - 1] = results[0].moji22;
-                                rateArray[23][i - 1] = parseInt((rateArray[20][i - 1] / rateArray[22][i - 1]) * 100);
-                                if (rateArray[22][i - 1] === 0) {
-                                    rateArray[23][i - 1] = 0;
+                                attendanceRateTable[22][i - 1] = results[0].moji22;
+                                attendanceRateTable[23][i - 1] = parseInt((attendanceRateTable[20][i - 1] / attendanceRateTable[22][i - 1]) * 100);
+                                if (attendanceRateTable[22][i - 1] === 0) {
+                                    attendanceRateTable[23][i - 1] = 0;
                                 }
                             }
                         }
                     );
 
                     connection.query(
-                        `select count(*) as moji24 from sys_${sysNumber}_${year}_${month} where location = '勤務地B' and day${i} = '出勤';`,
+                        `select count(*) as moji24 from sys_${sysNumber}_${year}_${month} where location = '蕨' and day${i} = '出勤';`,
                         (error, results) => {
                             if (results != null) {
-                                rateArray[24][i - 1] = results[0].moji24;
+                                attendanceRateTable[24][i - 1] = results[0].moji24;
                             }
                         }
                     );
 
                     connection.query(
-                        `select count(*) as moji25 from sys_${sysNumber}_${year}_${month} where location = '勤務地B' and day${i} = 'モバイル';`,
+                        `select count(*) as moji25 from sys_${sysNumber}_${year}_${month} where location = '蕨' and day${i} = 'モバイル';`,
                         (error, results) => {
                             if (results != null) {
-                                rateArray[25][i - 1] = results[0].moji25;
+                                attendanceRateTable[25][i - 1] = results[0].moji25;
                             }
                         }
                     );
 
                     connection.query(
-                        `select count(*) as moji26 from sys_${sysNumber}_${year}_${month} where location = '勤務地B';`,
+                        `select count(*) as moji26 from sys_${sysNumber}_${year}_${month} where location = '蕨';`,
                         (error, results) => {
                             if (results != null) {
-                                rateArray[26][i - 1] = results[0].moji26;
-                                rateArray[27][i - 1] = parseInt((rateArray[24][i - 1] / rateArray[26][i - 1] * 100));
-                                if (rateArray[26][i - 1] === 0) {
-                                    rateArray[27][i - 1] = 0;
+                                attendanceRateTable[26][i - 1] = results[0].moji26;
+                                attendanceRateTable[27][i - 1] = parseInt((attendanceRateTable[24][i - 1] / attendanceRateTable[26][i - 1] * 100));
+                                if (attendanceRateTable[26][i - 1] === 0) {
+                                    attendanceRateTable[27][i - 1] = 0;
                                 }
-                                //console.log(rateArray);
+
                                 if (i === 31) {
                                     console.log("発射");
-                                    res.json({ message: rateArray });
+                                    res.json({ message: attendanceRateTable });
                                 }
                             }
                         }
