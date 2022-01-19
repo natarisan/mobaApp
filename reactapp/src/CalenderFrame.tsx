@@ -16,7 +16,7 @@ type Props = {
 }
 
 
-export const CalenderFrame: FC<Props> = props => {
+export const CalenderFrame: FC<Props> = memo(props => {
 
 	const { attendanceTable, year, month, dates, sysNumber, attendanceRateTable, getAttendanceRate } = props;
 
@@ -55,7 +55,6 @@ export const CalenderFrame: FC<Props> = props => {
 			margin-left: 10px;
 		`;
 
-	//naose
 	const CalRateButton = styled.button`
             border: 1px solid #ccc;
             box-shadow: inset 1px 1px 1px #fff;
@@ -97,10 +96,10 @@ export const CalenderFrame: FC<Props> = props => {
 				attendanceRateTdArray.push(<Td>部全体</Td>);
 				break;
 			case 20:
-				attendanceRateTdArray.push(<Td>北陸SC</Td>);
+				attendanceRateTdArray.push(<Td>勤務地A</Td>);
 				break;
 			case 24:
-				attendanceRateTdArray.push(<Td>蕨</Td>);
+				attendanceRateTdArray.push(<Td>勤務地B</Td>);
 				break;
 			default:
 				attendanceRateTdArray.push(<Td></Td>);
@@ -254,4 +253,4 @@ export const CalenderFrame: FC<Props> = props => {
 
 		</CalenderFrame>
 	);
-}
+});
