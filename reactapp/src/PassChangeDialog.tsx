@@ -1,5 +1,5 @@
 import ReactModal from 'react-modal';
-import { useState, FormEvent, ChangeEvent, FC } from 'react';
+import { useState, FormEvent, ChangeEvent, FC, memo } from 'react';
 
 //パスワード設定(変更)画面。
 
@@ -9,7 +9,7 @@ type Props = {
     closePassDialog: () => void;
 }
 
-export const PassChangeDialog: FC<Props> = props => {
+export const PassChangeDialog: FC<Props> = memo(props => {
 
     const customStyles: ReactModal.Styles = {
         // 子ウィンドウを中央に表示
@@ -123,4 +123,4 @@ export const PassChangeDialog: FC<Props> = props => {
             </ReactModal>
         </>
     );
-}
+});
