@@ -1,5 +1,5 @@
 import ReactModal from 'react-modal';
-import { useContext, useEffect, useState, ChangeEvent, FormEvent, FC } from 'react';
+import { useContext, useEffect, useState, ChangeEvent, FormEvent, FC, memo } from 'react';
 import { UserInfo } from './App';
 
 //ログイン画面。
@@ -9,7 +9,7 @@ type Props = {
     closeLoginDialog: () => void;
 }
 
-export const LoginDialog: FC<Props> = props => {
+export const LoginDialog: FC<Props> = memo(props => {
 
     let { isDialogOpen, closeLoginDialog } = props;
 
@@ -136,4 +136,4 @@ export const LoginDialog: FC<Props> = props => {
             </ReactModal>
         </>
     );
-}
+});
