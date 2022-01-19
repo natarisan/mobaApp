@@ -1,5 +1,5 @@
 import ReactModal from 'react-modal';
-import { useEffect, useState, ChangeEvent, FC } from 'react';
+import { useEffect, useState, ChangeEvent, FC, memo } from 'react';
 import styled from 'styled-components';
 
 //出勤状況登録(更新)の画面。
@@ -19,7 +19,7 @@ type Props = {
 }
 
 
-export const NewPostDialog: FC<Props> = props => {
+export const NewPostDialog: FC<Props> = memo(props => {
 
     const Button = styled.button`          
             padding: 1em 0.75em;
@@ -196,4 +196,4 @@ export const NewPostDialog: FC<Props> = props => {
             </ReactModal>
         </div>
     );
-}
+});
