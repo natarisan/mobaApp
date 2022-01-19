@@ -125,6 +125,7 @@ app.post('/updatePassword', (req, res) => {
 
 })
 
+//部ごと月ごとに出社状況を取得する
 for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
     for (let year = 2021; year < 2024; year++) {
         for (let month = 1; month < 13; month++) {
@@ -193,6 +194,7 @@ for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
     }
 }
 
+//カテゴリ別に出社率を算出する
 for (let sysNumber = 1; sysNumber < 5; sysNumber++) {
     for (let year = 2021; year < 2024; year++) {
         for (let month = 1; month < 13; month++) {
