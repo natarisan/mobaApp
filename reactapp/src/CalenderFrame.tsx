@@ -180,10 +180,10 @@ export const CalenderFrame: FC<Props> = memo(props => {
 					role = "部全体";
 					break;
 				case 20:
-					role = "北陸SC";
+					role = "勤務地A";
 					break;
 				case 24:
-					role = "蕨";
+					role = "勤務地B";
 					break;
 			}
 
