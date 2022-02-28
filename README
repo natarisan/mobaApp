@@ -1,5 +1,7 @@
 社内で運用したシステムのソースの一部です。(情報漏洩防止のため、少しコードを変えてあります)
 
+実際はもっと規模が大きいです。
+
 nodeappにnode.jsのサーバ、reactappにreactのソースコードがあります。
 
 nodeの方はJavaScript、reactの方は主にTypeScriptを用いています。
